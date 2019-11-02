@@ -24,9 +24,12 @@ export const ROUNDS_REQUEST = 'ROUNDS_REQUEST';
 export const ROUNDS_SUCCESS = 'ROUNDS_SUCCESS';
 export const ROUNDS_FAILURE = 'ROUNDS_FAILURE';
 
-export const setImage = (id) => ({
+export const FINISH_REQUEST = 'FINISH_REQUEST';
+export const FINISH_SUCCESS = 'FINISH_SUCCESS';
+
+export const setImage = (image) => ({
   type: SET_IMAGE,
-  id,
+  image,
 });
 
 export const usersRequest = (ids) => ({
@@ -117,4 +120,12 @@ export const roundsSuccess = (rounds) => ({
 export const roundsError = (e) => ({
   type: ROUNDS_FAILURE,
   e,
+});
+
+export const finishRequest = () => ({
+  type: FINISH_REQUEST,
+});
+
+export const finishSuccess = () => ({
+  type: FINISH_SUCCESS,
 });

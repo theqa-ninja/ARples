@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { takeLatest, put } from 'redux-saga/effects';
+import { takeLatest, put, select } from 'redux-saga/effects';
 import {
   userSuccess,
   USER_REQUEST,
@@ -13,6 +13,8 @@ import {
   ROUNDS_REQUEST,
   roundsSuccess,
   gamesSuccess,
+  FINISH_REQUEST,
+  finishSuccess,
 } from '../actions';
 
 const baseUrl = 'http://localhost:3000';
@@ -56,6 +58,13 @@ function* roundsRequest({ ids }) {
   yield put(roundsSuccess(rounds));
 }
 
+function* finishRequest() {
+  const image = yield select((state) => state.image.image);
+  const roundId = yield select((state) => state.rounds.round.id);
+  yield axios.post(`${baseUrl}/submit/${roundId}`, image);
+  yield put(finishSuccess());
+}
+
 export default function* rootSaga() {
   yield takeLatest(USER_REQUEST, userRequest);
   yield takeLatest(GAME_REQUEST, gameRequest);
@@ -64,4 +73,6 @@ export default function* rootSaga() {
   yield takeLatest(USERS_REQUEST, usersRequest);
   yield takeLatest(GAMES_REQUEST, gamesRequest);
   yield takeLatest(ROUNDS_REQUEST, roundsRequest);
+
+  yield takeLatest(FINISH_REQUEST, finishRequest);
 }

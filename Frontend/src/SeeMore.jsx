@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './SeeMore.css';
 import { Button } from 'grommet';
-import { setImage } from './actions';
+import { setImage, finishRequest } from './actions';
 
 export class SeeMore extends React.Component {
   constructor() {
@@ -14,14 +14,20 @@ export class SeeMore extends React.Component {
     };
   }
 
-  onSubmit = (id) => {
-    this.props.setImage(id);
+  onSubmit = () => {
+    this.props.setImage(
+      this.state.selected ? this.props.curr : this.props.image,
+    );
+  };
+
+  onFinish = () => {
+    this.props.finishRequest();
   };
 
   onClick = (selected) => () => this.setState({ selected });
 
   render() {
-    const { curr: image } = this.props;
+    const { image, curr } = this.props;
     const { selected } = this.state;
     return (
       <div className="SeeMore">
@@ -29,33 +35,62 @@ export class SeeMore extends React.Component {
         <div>
           <img
             alt="curr"
-            src={image}
+            src={curr.url}
             height={window.innerHeight / 3}
             className={selected ? 'selected' : ''}
             onClick={this.onClick(true)}
+            style={{ cursor: 'pointer' }}
           />
         </div>
-        <h1>Selected Image</h1>
-        <div>
-          <img
-            alt="curr"
-            src={image}
-            height={window.innerHeight / 3}
-            className={!selected ? 'selected' : ''}
-            onClick={this.onClick(false)}
-          />
-        </div>
-        <Button label="Set (submits at end)" style={{ marginTop: '1em' }} />
+        {image ? (
+          <>
+            <h1>Selected Image</h1>
+            <div>
+              <img
+                alt="selected"
+                src={image.url}
+                height={window.innerHeight / 3}
+                className={!selected ? 'selected' : ''}
+                onClick={this.onClick(false)}
+                style={{ cursor: 'pointer' }}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            <h1>No Image Selected</h1>
+            <img
+              alt="selected"
+              src={curr.url}
+              height={window.innerHeight / 3}
+              className={!selected ? 'selected' : ''}
+              onClick={this.onClick(false)}
+              style={{ filter: 'grayscale(100%)' }}
+            />
+          </>
+        )}
+        <Button
+          onClick={this.onSubmit}
+          label="Set"
+          style={{ marginTop: '1em' }}
+        />
+        <Button
+          onClick={this.onFinish}
+          label="Finish"
+          style={{ marginTop: '1em' }}
+          disabled={!image}
+        />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => state;
+const mapStateToProps = (state) => ({ image: state.image.image });
 
 export default connect(
   mapStateToProps,
   {
     setImage,
+    finishRequest,
   },
 )(SeeMore);

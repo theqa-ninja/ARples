@@ -100,7 +100,7 @@ app.get('/round/:id', (req, res) => {
   getPhotosInAlbum(108823223893160)
 })
 
-app.post('/submit/:id', (req, res) => {
+app.post('/submit/:roundId', (req, res) => {
   console.log(req.body);
 
   res.json({ success: true });
