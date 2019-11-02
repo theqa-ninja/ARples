@@ -53,6 +53,9 @@ export class SeeMore extends React.Component {
 
 const mapStateToProps = (state) => state;
 
-export default connect(SeeMore)(mapStateToProps, {
-  setImage,
-});
+export default connect(
+  mapStateToProps,
+  {
+    setImage,
+  },
+)(SeeMore);
