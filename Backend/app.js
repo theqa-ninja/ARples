@@ -98,7 +98,7 @@ app.get('/round/:id', (req, res) => {
 });
 
 app.get('/fakeround/:id', (req, res) => {
-  getPhotosInAlbum(108823223893160)
+  getPhotosInAlbum(108823223893160, res)
 })
 
 app.post('/submit/:roundId', (req, res) => {
@@ -353,7 +353,7 @@ function callSendAPI(sender_psid, response) {
   );
 }
 
-function getPhotosInAlbum(album_id)
+function getPhotosInAlbum(album_id, res)
 {
   var options = {
     method: 'GET',
