@@ -152,7 +152,7 @@ function handleMessage(sender_psid, received_message) {
                   subtitle: 'Which category do you want to judge?',
                   default_action: {
                     type: 'web_url',
-                    url: 'https://arples.herokuapp.com/' + word[1],
+                    url: 'https://arples.herokuapp.com/' + words[1],
                   },
                   buttons: [
                     {
