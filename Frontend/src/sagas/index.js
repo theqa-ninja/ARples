@@ -17,7 +17,9 @@ import {
   finishSuccess,
 } from '../actions';
 
-const baseUrl = 'http://localhost:3000';
+const baseUrl =  process.env.NODE_ENV === 'production'
+    ? 'https://arples-back.herokuapp.com'
+    : 'http://localhost:3000';
 
 function* userRequest({ id }) {
   const { data: user } = yield axios.get(`${baseUrl}/user/${id}`);
