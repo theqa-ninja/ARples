@@ -4,7 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './SeeMore.css';
 import { Button } from 'grommet';
-import { setImage } from './actions';
+import { setImage, finishRequest } from './actions';
 
 export class SeeMore extends React.Component {
   constructor() {
@@ -18,6 +18,10 @@ export class SeeMore extends React.Component {
     this.props.setImage(
       this.state.selected ? this.props.curr : this.props.image,
     );
+  };
+
+  onFinish = () => {
+    this.props.finishRequest();
   };
 
   onClick = (selected) => () => this.setState({ selected });
@@ -35,6 +39,7 @@ export class SeeMore extends React.Component {
             height={window.innerHeight / 3}
             className={selected ? 'selected' : ''}
             onClick={this.onClick(true)}
+            style={{ cursor: 'pointer' }}
           />
         </div>
         {image ? (
@@ -47,6 +52,7 @@ export class SeeMore extends React.Component {
                 height={window.innerHeight / 3}
                 className={!selected ? 'selected' : ''}
                 onClick={this.onClick(false)}
+                style={{ cursor: 'pointer' }}
               />
             </div>
           </>
@@ -65,8 +71,14 @@ export class SeeMore extends React.Component {
         )}
         <Button
           onClick={this.onSubmit}
-          label="Set (submits at end)"
+          label="Set"
           style={{ marginTop: '1em' }}
+        />
+        <Button
+          onClick={this.onFinish}
+          label="Finish"
+          style={{ marginTop: '1em' }}
+          disabled={!image}
         />
       </div>
     );
@@ -79,5 +91,6 @@ export default connect(
   mapStateToProps,
   {
     setImage,
+    finishRequest,
   },
 )(SeeMore);
