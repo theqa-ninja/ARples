@@ -119,8 +119,8 @@ function handleMessage(sender_psid, received_message) {
               "default_action": {
                 "type": "web_url",
                 "url": "https://arples.herokuapp.com/",
-                "messenger_extensions": FALSE,
-                "webview_height_ratio": FULL
+                "messenger_extensions": "FALSE",
+                "webview_height_ratio": "FULL"
               }
             }]
           }
