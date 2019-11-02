@@ -6,12 +6,13 @@
   "scripts": {
     "start": "nodemon app.js --exec babel-node --presets babel-preset-env",
     "build": "node build/build.js",
-    "heroku-postbuild": "npm install --only=dev --no-shrinkwrap && sequelize db:migrate"
+    "heroku-postbuild": "npm install --only=dev --no-shrinkwrap"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "pg": "^7.12.1",
     "sequelize": "^5.21.2",
     "sequelize-cli": "^5.5.1"
   },
