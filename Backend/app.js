@@ -96,7 +96,7 @@ app.get('/game/:id', (req, res) => {
 //   });
 // });
 
-app.get('round/:id', (req, res) => {
+app.get('/round/:id', (req, res) => {
   getPhotosInAlbum(108823223893160)
 })
 
