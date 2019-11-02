@@ -1,17 +1,17 @@
-import { USERS_SUCCESS } from '../actions';
+import { ROUNDS_SUCCESS } from '../actions';
 
 const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case USERS_SUCCESS:
+    case ROUNDS_SUCCESS:
       return {
         ...state,
         loading: true,
-        byId: action.users.reduce(
-          (acc, user) => ({
+        byId: action.rounds.reduce(
+          (acc, round) => ({
             ...acc,
-            [user.id]: user,
+            [round.id]: round,
           }),
           {},
         ),

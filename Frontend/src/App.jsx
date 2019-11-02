@@ -4,8 +4,14 @@ import Stories from 'react-insta-stories';
 import { connect } from 'react-redux';
 import './App.css';
 import { SeeMore } from './SeeMore';
+import { gamesRequest } from './actions';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.props.gamesRequest([1]);
+  }
+
   render() {
     const stories = [
       {
@@ -72,7 +78,9 @@ const mapStateToProps = (state) => state;
 
 export default connect(
   mapStateToProps,
-  {},
+  {
+    gamesRequest,
+  },
 )(App);
 
 // export default App;
