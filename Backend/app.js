@@ -223,6 +223,7 @@ function handleMessage(sender_psid, received_message) {
           response = {
             text: `Click this link to add the filter ${filter_url}`,
           };
+          break;
       default:
         response = {
           text: `Sorry, the available commands are as follows
