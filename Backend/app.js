@@ -105,13 +105,35 @@ function handleMessage(sender_psid, received_message) {
   let response;
 
   // Checks if the message contains text
-  if (received_message.text) {
-    // Create the payload for a basic text message, which
-    // will be added to the body of our request to the Send API
-    response = {
-      "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
+  if (received_message.text)
+  {
+    // judge message
+    if (received_message.text.indexOf("judge") > -1)
+    {
+      response = {
+        "payload": {
+          "template_type": "generic",
+          "elements": [{
+              "title":"Go forth and Judge",
+              "subtitle":"Which category do you want to judge?",
+              "default_action": {
+                "type": "web_url",
+                "url": "https://arples.herokuapp.com/",
+                "messenger_extensions": FALSE,
+                "webview_height_ratio": FULL
+              }
+            }]
+          }
+        }
+      }
+      // generic message
+    else {
+      response = {
+        "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
+      }
     }
-  } else if (received_message.attachments) {
+  }
+  else if (received_message.attachments) {
     // Get the URL of the message attachment
     let attachment_url = received_message.attachments[0].payload.url;
     response = {
@@ -136,8 +158,8 @@ function handleMessage(sender_psid, received_message) {
               },
               {
                 "type": "postback",
-                "title": "Sunshine",
-                "payload": "sunshine",
+                "title": "Cancel Submission",
+                "payload": "sudo cancel my submission",
               }
             ],
           }]
@@ -167,6 +189,9 @@ function handlePostback(sender_psid, received_postback) {
       break
     case 'sunshine':
       response = { "text": "Thanks for the sunshine submission" }
+      break
+    case 'sudo cancel my submission':
+        response = { "text": "Cancelling your submission" }
       break
     default:
       response = { "text": "Where am I supposed to put this?" }
