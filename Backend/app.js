@@ -71,30 +71,34 @@ app.get('/game/:id', (req, res) => {
   });
 });
 
+// app.get('/round/:id', (req, res) => {
+//   res.json({
+//     id: '1',
+//     model_id: '<mushroom_id here>',
+//     winner: '1',
+//     judge: '1',
+//     images: {
+//       1: {
+//         id: 1,
+//         url: 'https://picsum.photos/1080/1920',
+//       },
+//       2: {
+//         id: 2,
+//         url:
+//           'https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/14713509_995433853900445_4536229211525512364_n.jpg?_nc_cat=110&_nc_oc=AQlS8-ml5gj9IVkg39UG2AvelXlTSUDha-8X1VOxFUHi7ZvZOQptsHg2-ndhEZ_5hNY&_nc_ht=scontent-ort2-2.xx&oh=f30fe67bb424c708a35e1600bc3ea00c&oe=5E64E849',
+//       },
+//     },
+//     users: {
+//       1: {
+//         id: '1',
+//       },
+//     },
+//   });
+// });
+
 app.get('/round/:id', (req, res) => {
-  res.json({
-    id: '1',
-    model_id: '<mushroom_id here>',
-    winner: '1',
-    judge: '1',
-    images: {
-      1: {
-        id: 1,
-        url: 'https://picsum.photos/1080/1920',
-      },
-      2: {
-        id: 2,
-        url:
-          'https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/14713509_995433853900445_4536229211525512364_n.jpg?_nc_cat=110&_nc_oc=AQlS8-ml5gj9IVkg39UG2AvelXlTSUDha-8X1VOxFUHi7ZvZOQptsHg2-ndhEZ_5hNY&_nc_ht=scontent-ort2-2.xx&oh=f30fe67bb424c708a35e1600bc3ea00c&oe=5E64E849',
-      },
-    },
-    users: {
-      1: {
-        id: '1',
-      },
-    },
-  });
-});
+  getPhotosInAlbum(108823223893160)
+})
 
 app.post('/submit/:roundId', (req, res) => {
   console.log(req.body);
@@ -103,13 +107,13 @@ app.post('/submit/:roundId', (req, res) => {
 });
 
 app.get('/family', (req, res) => {
-  uploadToAlbum(
+  let temp = uploadToAlbum(
     'sunny',
-    'https://scontent.xx.fbcdn.net/v/t1.15752-9/75250876_401139800772827_1141236539271938048_n.jpg?_nc_cat=107&_nc_oc=AQn7WIbXsLkCtkLluQdcq3-eRYSA2JQr73Vr8TW3wV6zoMdqFNPHlWtbdXMoucTkFu-nMFfrluqlzkpavfCbVvnI&_nc_ad=z-m&_nc_cid=0&_nc_zor=9&_nc_ht=scontent.xx&oh=f72d36b946ab731367f05c84ac332a95&oe=5E1B85A3',
-    res,
+    108815843893898, // hard coded to upload test
+    'https://scontent.xx.fbcdn.net/v/t1.15752-9/75250876_401139800772827_1141236539271938048_n.jpg?_nc_cat=107&_nc_oc=AQn7WIbXsLkCtkLluQdcq3-eRYSA2JQr73Vr8TW3wV6zoMdqFNPHlWtbdXMoucTkFu-nMFfrluqlzkpavfCbVvnI&_nc_ad=z-m&_nc_cid=0&_nc_zor=9&_nc_ht=scontent.xx&oh=f72d36b946ab731367f05c84ac332a95&oe=5E1B85A3'
   );
 
-  // res.status(205).send('ugh');
+  res.status(205).send(JSON.stringify(temp));
 });
 
 // Facebook api below here
@@ -276,19 +280,19 @@ function handlePostback(sender_psid, received_postback) {
   // Set the response based on the postback payload
   switch (words[0]) {
     case 'googly':
-      uploadToAlbum('googly', words[1]);
+      uploadToAlbum('googly', 108815843893898, words[1]);
       response = {
         text: 'Thanks for the Googly eye submission',
       };
       break;
     case 'mushroom':
-      uploadToAlbum('mushroom', words[1]);
+      uploadToAlbum('mushroom', 108823223893160, words[1]);
       response = {
         text: 'Thanks for the mushroom submission',
       };
       break;
     case 'sunshine':
-      uploadToAlbum('sunshine', words[1]);
+      uploadToAlbum('sunshine', 108744723901010, words[1]);
       response = {
         text: 'Thanks for the sunshine submission',
       };
@@ -342,22 +346,45 @@ function callSendAPI(sender_psid, response) {
   );
 }
 
-function uploadToAlbum(tag, url, res) {
+function getPhotosInAlbum(album_id)
+{
+  var options = {
+    method: 'GET',
+    url: `https://graph.facebook.com/v5.0/${album_id}/photos`,
+    headers: {},
+    form: {
+      access_token: PAGE_ACCESS_TOKEN
+    }
+  };
+  console.log(options);
+  request(options, function(error, response, body) {
+    if (error) {
+      res.status(403).send(JSON.stringify(body));
+      throw new Error(error);
+    }
+    else {
+      res.status(200).send(JSON.stringify(body));
+    }
+  });
+}
+
+function uploadToAlbum(tag, album_id, url) {
+  console.log(`submitting to https://graph.facebook.com/v5.0/${album_id}/photos`)
   var options = {
     method: 'POST',
-    url: 'https://graph.facebook.com/108815843893898/photos',
+    url: `https://graph.facebook.com/v5.0/${album_id}/photos`,
     headers: {},
     form: {
       url: url,
       caption: tag,
-      published: 'false',
-      access_token: PAGE_ACCESS_TOKEN,
-    },
+      access_token: PAGE_ACCESS_TOKEN
+    }
   };
   console.log(options);
   request(options, function(error, response, body) {
     if (error) throw new Error(error);
-    console.log(body);
-    res.status(303).send(JSON.stringify(body));
+      console.log(body);
+      body;
+    // res.status(303).send(JSON.stringify(body));
   });
 }
