@@ -68,7 +68,11 @@ app.post('/webhook', (req, res) => {
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
       console.log('Sender PSID: ' + sender_psid);
-      callSendAPI(sender_psid, text)
+
+      response = {
+        "text": `You sent the message: "${text}". Now send me an image!`
+      }
+      callSendAPI(sender_psid, response)
 
     });
 
@@ -80,7 +84,6 @@ app.post('/webhook', (req, res) => {
     console.log('beep 404 on webhook')
     res.sendStatus(404);
   }
-
 });
 
 app.listen(port, () => {
