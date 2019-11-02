@@ -3,7 +3,7 @@ import { Grommet } from 'grommet';
 import Stories from 'react-insta-stories';
 import { connect } from 'react-redux';
 import './App.css';
-import { SeeMore } from './SeeMore';
+import SeeMore from './SeeMore';
 import { roundRequest } from './actions';
 
 class App extends React.Component {
@@ -22,7 +22,7 @@ class App extends React.Component {
             <Stories
               stories={Object.values(round.images).map((image) => ({
                 url: image.url,
-                seeMore: <SeeMore />,
+                seeMore: <SeeMore curr={image} />,
                 header: {
                   heading: 'Mohit Karekar',
                   subheading: 'Posted 5h ago',

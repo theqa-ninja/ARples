@@ -8,7 +8,7 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case SET_IMAGE:
       return {
-        image: action.id,
+        image: action.image,
       };
     default:
       return state;

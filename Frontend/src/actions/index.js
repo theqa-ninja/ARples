@@ -24,9 +24,9 @@ export const ROUNDS_REQUEST = 'ROUNDS_REQUEST';
 export const ROUNDS_SUCCESS = 'ROUNDS_SUCCESS';
 export const ROUNDS_FAILURE = 'ROUNDS_FAILURE';
 
-export const setImage = (id) => ({
+export const setImage = (image) => ({
   type: SET_IMAGE,
-  id,
+  image,
 });
 
 export const usersRequest = (ids) => ({

@@ -96,7 +96,7 @@ app.get('/round/:id', (req, res) => {
   });
 });
 
-app.post('/submit/:id', (req, res) => {
+app.post('/submit/:roundId', (req, res) => {
   console.log(req.body);
 
   res.json({ success: true });

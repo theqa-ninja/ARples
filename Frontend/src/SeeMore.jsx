@@ -14,14 +14,16 @@ export class SeeMore extends React.Component {
     };
   }
 
-  onSubmit = (id) => {
-    this.props.setImage(id);
+  onSubmit = () => {
+    this.props.setImage(
+      this.state.selected ? this.props.curr : this.props.image,
+    );
   };
 
   onClick = (selected) => () => this.setState({ selected });
 
   render() {
-    const { curr: image } = this.props;
+    const { image, curr } = this.props;
     const { selected } = this.state;
     return (
       <div className="SeeMore">
@@ -29,29 +31,49 @@ export class SeeMore extends React.Component {
         <div>
           <img
             alt="curr"
-            src={image}
+            src={curr.url}
             height={window.innerHeight / 3}
             className={selected ? 'selected' : ''}
             onClick={this.onClick(true)}
           />
         </div>
-        <h1>Selected Image</h1>
-        <div>
-          <img
-            alt="curr"
-            src={image}
-            height={window.innerHeight / 3}
-            className={!selected ? 'selected' : ''}
-            onClick={this.onClick(false)}
-          />
-        </div>
-        <Button label="Set (submits at end)" style={{ marginTop: '1em' }} />
+        {image ? (
+          <>
+            <h1>Selected Image</h1>
+            <div>
+              <img
+                alt="selected"
+                src={image.url}
+                height={window.innerHeight / 3}
+                className={!selected ? 'selected' : ''}
+                onClick={this.onClick(false)}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            <h1>No Image Selected</h1>
+            <img
+              alt="selected"
+              src={curr.url}
+              height={window.innerHeight / 3}
+              className={!selected ? 'selected' : ''}
+              onClick={this.onClick(false)}
+              style={{ filter: 'grayscale(100%)' }}
+            />
+          </>
+        )}
+        <Button
+          onClick={this.onSubmit}
+          label="Set (submits at end)"
+          style={{ marginTop: '1em' }}
+        />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => state;
+const mapStateToProps = (state) => ({ image: state.image.image });
 
 export default connect(
   mapStateToProps,
