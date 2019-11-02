@@ -111,21 +111,24 @@ function handleMessage(sender_psid, received_message) {
     if (received_message.text.indexOf("judge") > -1)
     {
       response = {
-        "payload": {
+        "attachment": {
+          "type": "template",
+          "payload": {
           "template_type": "generic",
           "elements": [{
-              "title":"Go forth and Judge",
-              "subtitle":"Which category do you want to judge?",
-              "default_action": {
-                "type": "web_url",
-                "url": "https://arples.herokuapp.com/",
-                "messenger_extensions": "FALSE",
-                "webview_height_ratio": "FULL"
+            "title":"Go forth and Judge",
+            "subtitle":"Which category do you want to judge?",
+            "default_action": {
+              "type": "web_url",
+              "url": "https://arples.herokuapp.com/",
+              "messenger_extensions": "FALSE",
+              "webview_height_ratio": "FULL"
               }
             }]
           }
         }
       }
+    }
       // generic message
     else {
       response = {
