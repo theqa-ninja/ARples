@@ -20,7 +20,7 @@ app.get('/test', (request, response) => {
   response.json({ user: '93857129', name: 'John Doe', photo: 'https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/14713509_995433853900445_4536229211525512364_n.jpg?_nc_cat=110&_nc_oc=AQlS8-ml5gj9IVkg39UG2AvelXlTSUDha-8X1VOxFUHi7ZvZOQptsHg2-ndhEZ_5hNY&_nc_ht=scontent-ort2-2.xx&oh=f30fe67bb424c708a35e1600bc3ea00c&oe=5E64E849' })
 })
 
-app.post('/webhook', (req, res) => {
+app.get('/webhook', (req, res) => {
   const VERIFY_TOKEN = "blah";
 
     // Parse the query params
