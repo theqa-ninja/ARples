@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { takeEvery, put } from 'redux-saga';
+import { takeEvery } from 'redux-saga';
+import { put } from 'redux-saga/effects';
 import {
   userSuccess,
   USER_REQUEST,
