@@ -105,7 +105,7 @@ function callSendAPI(sender_psid, response) {
     "recipient": {
       "id": sender_psid
     },
-    "message": `test message: ${response}`
+    "message": response
   }
   console.log(`token ${PAGE_ACCESS_TOKEN}`)
   // Send the HTTP request to the Messenger Platform
