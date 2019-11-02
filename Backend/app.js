@@ -123,19 +123,24 @@ function handleMessage(sender_psid, received_message) {
         "payload": {
           "template_type": "generic",
           "elements": [{
-            "title": "Is this the right picture?",
+            "title": "Which model is this picture?",
             "subtitle": "Tap a button to answer.",
             "image_url": attachment_url,
             "buttons": [
               {
                 "type": "postback",
-                "title": "Yes!",
-                "payload": "yes",
+                "title": "Googly Eyes!",
+                "payload": "googly",
               },
               {
                 "type": "postback",
-                "title": "No!",
-                "payload": "no",
+                "title": "Mushroom",
+                "payload": "mushroom",
+              },
+              {
+                "type": "postback",
+                "title": "Sunshine",
+                "payload": "sunshine",
               }
             ],
           }]
@@ -149,7 +154,29 @@ function handleMessage(sender_psid, received_message) {
 }
 
 // Handles messaging_postbacks events
-function handlePostback(sender_psid, received_postback) {}
+function handlePostback(sender_psid, received_postback) {
+  let response;
+
+  // Get the payload for the postback
+  let payload = received_postback.payload;
+
+  // Set the response based on the postback payload
+  switch(payload) {
+    case 'googly':
+      response = { "text": "Thanks for the Googly eye submission" }
+      break
+    case 'mushroom':
+      response = { "text": "Thanks for the mushroom submission" }
+      break
+    case 'sunshine':
+      response = { "text": "Thanks for the sunshine submission" }
+      break
+    default:
+      response = { "text": "Where am I supposed to put this?" }
+  }
+  // Send the message to acknowledge the postback
+  callSendAPI(sender_psid, response);
+}
 
 // Sends response messages via the Send API
 function callSendAPI(sender_psid, response) {
