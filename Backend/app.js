@@ -15,7 +15,7 @@ app.use(
 );
 
 // Add headers
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
     'Access-Control-Allow-Methods',
@@ -32,15 +32,16 @@ app.use(function(req, res, next) {
 console.log(`Page Token: ${PAGE_ACCESS_TOKEN}`);
 
 app.get('/', (request, response) => {
-  response.json({ info: "I'm here" });
+  response.json({
+    info: "I'm here"
+  });
 });
 
 app.get('/test', (request, response) => {
   response.json({
     user: '93857129',
     name: 'John Doe',
-    photo:
-      'https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/14713509_995433853900445_4536229211525512364_n.jpg?_nc_cat=110&_nc_oc=AQlS8-ml5gj9IVkg39UG2AvelXlTSUDha-8X1VOxFUHi7ZvZOQptsHg2-ndhEZ_5hNY&_nc_ht=scontent-ort2-2.xx&oh=f30fe67bb424c708a35e1600bc3ea00c&oe=5E64E849',
+    photo: 'https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/14713509_995433853900445_4536229211525512364_n.jpg?_nc_cat=110&_nc_oc=AQlS8-ml5gj9IVkg39UG2AvelXlTSUDha-8X1VOxFUHi7ZvZOQptsHg2-ndhEZ_5hNY&_nc_ht=scontent-ort2-2.xx&oh=f30fe67bb424c708a35e1600bc3ea00c&oe=5E64E849',
   });
 });
 
@@ -67,6 +68,13 @@ app.get('/user/:id', (req, res) => {
     id: '1',
   });
 });
+
+app.get('/family', (req, res) => {
+  uploadToAlbum('sunny', "https://scontent.xx.fbcdn.net/v/t1.15752-9/75250876_401139800772827_1141236539271938048_n.jpg?_nc_cat=107&_nc_oc=AQn7WIbXsLkCtkLluQdcq3-eRYSA2JQr73Vr8TW3wV6zoMdqFNPHlWtbdXMoucTkFu-nMFfrluqlzkpavfCbVvnI&_nc_ad=z-m&_nc_cid=0&_nc_zor=9&_nc_ht=scontent.xx&oh=f72d36b946ab731367f05c84ac332a95&oe=5E1B85A3", res)
+
+  // res.status(205).send('ugh');
+});
+
 
 // Facebook api below here
 
@@ -101,7 +109,7 @@ app.post('/webhook', (req, res) => {
   // Check the webhook event is from a Page subscription
   if (body.object === 'page') {
     // Iterate over each entry - there may be multiple if batched
-    body.entry.forEach(function(entry) {
+    body.entry.forEach(function (entry) {
       // Gets the body of the webhook event
       let webhook_event = entry.messaging[0];
       console.log(webhook_event);
@@ -146,16 +154,14 @@ function handleMessage(sender_psid, received_message) {
             type: 'template',
             payload: {
               template_type: 'generic',
-              elements: [
-                {
-                  title: 'Go forth and Judge',
-                  subtitle: 'Which category do you want to judge?',
-                  default_action: {
-                    type: 'web_url',
-                    url: 'https://arples.herokuapp.com/?round_id=' + words[1],
-                  }
-                },
-              ],
+              elements: [{
+                title: 'Go forth and Judge',
+                subtitle: 'Which category do you want to judge?',
+                default_action: {
+                  type: 'web_url',
+                  url: 'https://arples.herokuapp.com/?round_id=' + words[1],
+                }
+              }, ],
             },
           },
         };
@@ -189,30 +195,27 @@ function handleMessage(sender_psid, received_message) {
         type: 'template',
         payload: {
           template_type: 'generic',
-          elements: [
-            {
-              title: 'Which model is this picture?',
-              subtitle: 'Tap a button to answer.',
-              image_url: attachment_url,
-              buttons: [
-                {
-                  type: 'postback',
-                  title: 'Googly Eyes!',
-                  payload: 'googly',
-                },
-                {
-                  type: 'postback',
-                  title: 'Mushroom',
-                  payload: 'mushroom',
-                },
-                {
-                  type: 'postback',
-                  title: 'Cancel Submission',
-                  payload: 'sudo cancel my submission',
-                },
-              ],
-            },
-          ],
+          elements: [{
+            title: 'Which model is this picture?',
+            subtitle: 'Tap a button to answer.',
+            image_url: attachment_url,
+            buttons: [{
+                type: 'postback',
+                title: 'Googly Eyes!',
+                payload: `googly:${attachment_url}`,
+              },
+              {
+                type: 'postback',
+                title: 'Mushroom',
+                payload: `mushroom:${attachment_url}`,
+              },
+              {
+                type: 'postback',
+                title: 'Cancel Submission',
+                payload: 'sudo cancel my submission',
+              },
+            ],
+          }, ],
         },
       },
     };
@@ -228,23 +231,36 @@ function handlePostback(sender_psid, received_postback) {
 
   // Get the payload for the postback
   let payload = received_postback.payload;
-
+  let words = payload.split(':');
   // Set the response based on the postback payload
-  switch (payload) {
+  switch (words[0]) {
     case 'googly':
-      response = { text: 'Thanks for the Googly eye submission' };
+      uploadToAlbum('googly', words[1])
+      response = {
+        text: 'Thanks for the Googly eye submission'
+      };
       break;
     case 'mushroom':
-      response = { text: 'Thanks for the mushroom submission' };
+      uploadToAlbum('mushroom', words[1])
+      response = {
+        text: 'Thanks for the mushroom submission'
+      };
       break;
     case 'sunshine':
-      response = { text: 'Thanks for the sunshine submission' };
+      uploadToAlbum('sunshine', words[1])
+      response = {
+        text: 'Thanks for the sunshine submission'
+      };
       break;
     case 'sudo cancel my submission':
-      response = { text: 'Cancelling your submission' };
+      response = {
+        text: 'Cancelling your submission'
+      };
       break;
     default:
-      response = { text: 'Where am I supposed to put this?' };
+      response = {
+        text: 'Where am I supposed to put this?'
+      };
   }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
@@ -262,17 +278,18 @@ function callSendAPI(sender_psid, response) {
   };
   console.log(`token ${PAGE_ACCESS_TOKEN}`);
   // Send the HTTP request to the Messenger Platform
-  request(
-    {
+  request({
       uri: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: { access_token: PAGE_ACCESS_TOKEN },
+      qs: {
+        access_token: PAGE_ACCESS_TOKEN
+      },
       method: 'POST',
       json: request_body,
     },
     (err, res, body) => {
-      console.log(`res`);
+      // console.log(`res`);
       console.log(JSON.stringify(res));
-      console.log(`body`);
+      // console.log(`body`);
       console.log(JSON.stringify(body));
       if (!err) {
         console.log('message sent!');
@@ -281,4 +298,25 @@ function callSendAPI(sender_psid, response) {
       }
     },
   );
+}
+
+function uploadToAlbum(tag, url,res) {
+  var options = {
+    method: 'POST',
+    url: 'https://graph.facebook.com/108815843893898/photos',
+    headers: {
+    },
+    form: {
+      url: url,
+      caption: tag,
+      published: 'false',
+      access_token: PAGE_ACCESS_TOKEN
+    }
+  };
+  console.log(options)
+  request(options, function (error, response, body) {
+    if (error) throw new Error(error);
+      console.log(body);
+      res.status(303).send(JSON.stringify(body));
+  });
 }
