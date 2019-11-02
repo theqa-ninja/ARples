@@ -246,12 +246,12 @@ function handleMessage(sender_psid, received_message) {
                 {
                   type: 'postback',
                   title: 'Googly Eyes!',
-                  payload: `googly:${attachment_url}`,
+                  payload: `googly:::${attachment_url}`,
                 },
                 {
                   type: 'postback',
                   title: 'Mushroom',
-                  payload: `mushroom:${attachment_url}`,
+                  payload: `mushroom:::${attachment_url}`,
                 },
                 {
                   type: 'postback',
@@ -276,7 +276,7 @@ function handlePostback(sender_psid, received_postback) {
 
   // Get the payload for the postback
   let payload = received_postback.payload;
-  let words = payload.split(':');
+  let words = payload.split(':::');
   // Set the response based on the postback payload
   switch (words[0]) {
     case 'googly':
