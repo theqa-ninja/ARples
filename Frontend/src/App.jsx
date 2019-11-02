@@ -22,7 +22,7 @@ class App extends React.Component {
       <div>
         {!roundsLoading && round !== undefined && (
           <>
-            {finished ? (
+            {!finished ? (
               <Grommet plain>
                 <Stories
                   stories={Object.values(round.images).map((image) => ({
