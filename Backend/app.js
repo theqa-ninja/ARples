@@ -252,12 +252,12 @@ function handleMessage(sender_psid, received_message) {
               buttons: [
                 {
                   type: 'postback',
-                  title: 'Googly Eyes!',
+                  title: 'Round 1',
                   payload: `googly:::${attachment_url}`,
                 },
                 {
                   type: 'postback',
-                  title: 'Mushroom',
+                  title: 'Round 2',
                   payload: `mushroom:::${attachment_url}`,
                 },
                 {
