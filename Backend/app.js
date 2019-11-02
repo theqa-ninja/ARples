@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const app = express();
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const port = process.env.PORT || 3000;
+const filter_url = "https://www.facebook.com/fbcameraeffects/testit/1233099840193548/ZWZlNWEyMWYyZmE0ZGE0MzU3Zjc2YWVmYzViYzI1YzM=/"
 
 const models = ['sunshine', 'mushroom'];
 
@@ -71,32 +72,32 @@ app.get('/game/:id', (req, res) => {
   });
 });
 
-// app.get('/round/:id', (req, res) => {
-//   res.json({
-//     id: '1',
-//     model_id: '<mushroom_id here>',
-//     winner: '1',
-//     judge: '1',
-//     images: {
-//       1: {
-//         id: 1,
-//         url: 'https://picsum.photos/1080/1920',
-//       },
-//       2: {
-//         id: 2,
-//         url:
-//           'https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/14713509_995433853900445_4536229211525512364_n.jpg?_nc_cat=110&_nc_oc=AQlS8-ml5gj9IVkg39UG2AvelXlTSUDha-8X1VOxFUHi7ZvZOQptsHg2-ndhEZ_5hNY&_nc_ht=scontent-ort2-2.xx&oh=f30fe67bb424c708a35e1600bc3ea00c&oe=5E64E849',
-//       },
-//     },
-//     users: {
-//       1: {
-//         id: '1',
-//       },
-//     },
-//   });
-// });
-
 app.get('/round/:id', (req, res) => {
+  res.json({
+    id: '1',
+    model_id: '<mushroom_id here>',
+    winner: '1',
+    judge: '1',
+    images: {
+      1: {
+        id: 1,
+        url: 'https://picsum.photos/1080/1920',
+      },
+      2: {
+        id: 2,
+        url:
+          'https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/14713509_995433853900445_4536229211525512364_n.jpg?_nc_cat=110&_nc_oc=AQlS8-ml5gj9IVkg39UG2AvelXlTSUDha-8X1VOxFUHi7ZvZOQptsHg2-ndhEZ_5hNY&_nc_ht=scontent-ort2-2.xx&oh=f30fe67bb424c708a35e1600bc3ea00c&oe=5E64E849',
+      },
+    },
+    users: {
+      1: {
+        id: '1',
+      },
+    },
+  });
+});
+
+app.get('/fakeround/:id', (req, res) => {
   getPhotosInAlbum(108823223893160)
 })
 
@@ -218,12 +219,18 @@ function handleMessage(sender_psid, received_message) {
           text: `the models are ${models.toString()}`,
         };
         break;
+      case 'setup':
+          response = {
+            text: `Click this link to add the filter ${filter_url}`,
+          };
+          break;
       default:
         response = {
           text: `Sorry, the available commands are as follows
-        New - start a new game
+        Setup - How do I play?
         Rules - what are the rules?
         Models - what are the images we're using?
+        Judge <Googly|Mushroom> - It's time to judge!
         or you can upload the image!
         `,
         };
