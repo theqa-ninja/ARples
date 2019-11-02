@@ -353,8 +353,6 @@ function getPhotosInAlbum(album_id)
     url: `https://graph.facebook.com/v5.0/${album_id}/photos`,
     headers: {},
     form: {
-      url: url,
-      caption: tag,
       access_token: PAGE_ACCESS_TOKEN
     }
   };
