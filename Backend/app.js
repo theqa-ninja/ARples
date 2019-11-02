@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const app = express();
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const port = process.env.PORT || 3000;
+const filter_url = "https://www.facebook.com/fbcameraeffects/testit/1233099840193548/ZWZlNWEyMWYyZmE0ZGE0MzU3Zjc2YWVmYzViYzI1YzM=/"
 
 const models = ['sunshine', 'mushroom'];
 
@@ -218,12 +219,17 @@ function handleMessage(sender_psid, received_message) {
           text: `the models are ${models.toString()}`,
         };
         break;
+      case 'setup':
+          response = {
+            text: `Click this link to add the filter ${filter_url}`,
+          };
       default:
         response = {
           text: `Sorry, the available commands are as follows
-        New - start a new game
+        Setup - How do I play?
         Rules - what are the rules?
         Models - what are the images we're using?
+        Judge <Googly|Mushroom> - It's time to judge!
         or you can upload the image!
         `,
         };
