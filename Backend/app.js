@@ -153,19 +153,7 @@ function handleMessage(sender_psid, received_message) {
                   default_action: {
                     type: 'web_url',
                     url: 'https://arples.herokuapp.com/?round_id=' + words[1],
-                  },
-                  buttons: [
-                    {
-                      type: 'postback',
-                      title: 'Googly Eyes!',
-                      payload: 'googly',
-                    },
-                    {
-                      type: 'postback',
-                      title: 'Mushroom',
-                      payload: 'mushroom',
-                    },
-                  ],
+                  }
                 },
               ],
             },
