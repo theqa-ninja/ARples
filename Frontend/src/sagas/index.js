@@ -17,8 +17,7 @@ import {
   finishSuccess,
 } from '../actions';
 
-const baseUrl =
-  process.env.NODE_ENV === 'production'
+const baseUrl =  process.env.NODE_ENV !== 'development'
     ? 'https://arples-back.herokuapp.com'
     : 'http://localhost:3000';
 
