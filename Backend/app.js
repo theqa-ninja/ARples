@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
+const morgan = require('morgan');
 const app = express();
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const port = process.env.PORT || 3000;
@@ -30,6 +31,7 @@ app.use(function(req, res, next) {
 });
 
 console.log(`Page Token: ${PAGE_ACCESS_TOKEN}`);
+app.use(morgan('tiny'));
 
 app.get('/', (request, response) => {
   response.json({ info: "I'm here" });
@@ -49,7 +51,21 @@ app.get('/test', (request, response) => {
 app.get('/game/:id', (req, res) => {
   res.json({
     id: '1',
-    rounds: ['1'],
+    rounds: [
+      {
+        id: '1',
+        model_id: '<mushroom_id here>',
+        winner: '1',
+        judge: '1',
+        images: [
+          'https://picsum.photos/1080/1920',
+          'https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/14713509_995433853900445_4536229211525512364_n.jpg?_nc_cat=110&_nc_oc=AQlS8-ml5gj9IVkg39UG2AvelXlTSUDha-8X1VOxFUHi7ZvZOQptsHg2-ndhEZ_5hNY&_nc_ht=scontent-ort2-2.xx&oh=f30fe67bb424c708a35e1600bc3ea00c&oe=5E64E849',
+        ],
+      },
+    ],
+    users: {
+      id: '1',
+    },
   });
 });
 
@@ -59,14 +75,36 @@ app.get('/round/:id', (req, res) => {
     model_id: '<mushroom_id here>',
     winner: '1',
     judge: '1',
+    images: {
+      1: {
+        id: 1,
+        url: 'https://picsum.photos/1080/1920',
+      },
+      2: {
+        id: 2,
+        url:
+          'https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/14713509_995433853900445_4536229211525512364_n.jpg?_nc_cat=110&_nc_oc=AQlS8-ml5gj9IVkg39UG2AvelXlTSUDha-8X1VOxFUHi7ZvZOQptsHg2-ndhEZ_5hNY&_nc_ht=scontent-ort2-2.xx&oh=f30fe67bb424c708a35e1600bc3ea00c&oe=5E64E849',
+      },
+    },
+    users: {
+      1: {
+        id: '1',
+      },
+    },
   });
 });
 
-app.get('/user/:id', (req, res) => {
-  res.json({
-    id: '1',
-  });
+app.post('/submit/:id', (req, res) => {
+  console.log(req.body);
+
+  res.json({ success: true });
 });
+
+// app.get('/user/:id', (req, res) => {
+//   res.json({
+//     id: '1',
+//   });
+// });
 
 // Facebook api below here
 

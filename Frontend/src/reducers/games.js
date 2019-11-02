@@ -1,4 +1,4 @@
-import { GAMES_SUCCESS } from '../actions';
+import { GAMES_SUCCESS, GAMES_REQUEST } from '../actions';
 
 const initialState = {
   loading: false,
@@ -7,10 +7,15 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case GAMES_SUCCESS:
+    case GAMES_REQUEST:
       return {
         ...state,
         loading: true,
+      };
+    case GAMES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
         byId: action.games.reduce(
           (acc, game) => ({
             ...acc,
