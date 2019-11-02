@@ -9,9 +9,11 @@ import { roundRequest } from './actions';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const { roundId } = new URLSearchParams(window.location.search).get(
-      'roundId',
-    );
+    // const { roundId } = new URLSearchParams(window.location.search).get(
+    //   'roundId',
+    // );
+
+    const roundId = window.location.search.split('=')[1];
     this.props.roundRequest(roundId);
   }
 

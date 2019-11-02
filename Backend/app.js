@@ -5,7 +5,8 @@ const morgan = require('morgan');
 const app = express();
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const port = process.env.PORT || 3000;
-const filter_url = "https://www.facebook.com/fbcameraeffects/testit/1233099840193548/ZWZlNWEyMWYyZmE0ZGE0MzU3Zjc2YWVmYzViYzI1YzM=/"
+const filter_url =
+  'https://www.facebook.com/fbcameraeffects/testit/1233099840193548/ZWZlNWEyMWYyZmE0ZGE0MzU3Zjc2YWVmYzViYzI1YzM=/';
 
 const models = ['sunshine', 'mushroom'];
 
@@ -72,34 +73,31 @@ app.get('/game/:id', (req, res) => {
   });
 });
 
-// app.get('/round/:id', (req, res) => {
-//   res.json({
-//     id: '1',
-//     model_id: '<mushroom_id here>',
-//     winner: '1',
-//     judge: '1',
-//     images: {
-//       1: {
-//         id: 1,
-//         url: 'https://picsum.photos/1080/1920',
-//       },
-//       2: {
-//         id: 2,
-//         url:
-//           'https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/14713509_995433853900445_4536229211525512364_n.jpg?_nc_cat=110&_nc_oc=AQlS8-ml5gj9IVkg39UG2AvelXlTSUDha-8X1VOxFUHi7ZvZOQptsHg2-ndhEZ_5hNY&_nc_ht=scontent-ort2-2.xx&oh=f30fe67bb424c708a35e1600bc3ea00c&oe=5E64E849',
-//       },
-//     },
-//     users: {
-//       1: {
-//         id: '1',
-//       },
-//     },
-//   });
-// });
-
 app.get('/round/:id', (req, res) => {
-  getPhotosInAlbum(req.params['id'], res)
-})
+  getPhotosInAlbum(req.param.id).then((urls) => {
+    res.json({
+      id: req.param.id,
+      model_id: '<mushroom_id here>',
+      winner: '1',
+      judge: '1',
+      images: urls.map((url, index) => ({
+        [index]: {
+          id: index,
+          url,
+        },
+      })),
+      users: {
+        1: {
+          id: '1',
+        },
+      },
+    });
+  });
+});
+
+// app.get('/round/:id', (req, res) => {
+//   getPhotosInAlbum(req.params['id'], res);
+// });
 
 app.post('/submit/:roundId', (req, res) => {
   console.log(req.body);
@@ -111,7 +109,7 @@ app.get('/family', (req, res) => {
   let temp = uploadToAlbum(
     'sunny',
     108815843893898, // hard coded to upload test
-    'https://scontent.xx.fbcdn.net/v/t1.15752-9/75250876_401139800772827_1141236539271938048_n.jpg?_nc_cat=107&_nc_oc=AQn7WIbXsLkCtkLluQdcq3-eRYSA2JQr73Vr8TW3wV6zoMdqFNPHlWtbdXMoucTkFu-nMFfrluqlzkpavfCbVvnI&_nc_ad=z-m&_nc_cid=0&_nc_zor=9&_nc_ht=scontent.xx&oh=f72d36b946ab731367f05c84ac332a95&oe=5E1B85A3'
+    'https://scontent.xx.fbcdn.net/v/t1.15752-9/75250876_401139800772827_1141236539271938048_n.jpg?_nc_cat=107&_nc_oc=AQn7WIbXsLkCtkLluQdcq3-eRYSA2JQr73Vr8TW3wV6zoMdqFNPHlWtbdXMoucTkFu-nMFfrluqlzkpavfCbVvnI&_nc_ad=z-m&_nc_cid=0&_nc_zor=9&_nc_ht=scontent.xx&oh=f72d36b946ab731367f05c84ac332a95&oe=5E1B85A3',
   );
 
   res.status(205).send(JSON.stringify(temp));
@@ -220,10 +218,10 @@ function handleMessage(sender_psid, received_message) {
         };
         break;
       case 'setup':
-          response = {
-            text: `Click this link to add the filter ${filter_url}`,
-          };
-          break;
+        response = {
+          text: `Click this link to add the filter ${filter_url}`,
+        };
+        break;
       default:
         response = {
           text: `Sorry, the available commands are as follows
@@ -355,31 +353,37 @@ function callSendAPI(sender_psid, response) {
   );
 }
 
-function getPhotosInAlbum(album_id, res)
-{
-  var options = {
-    method: 'GET',
-    url: `https://graph.facebook.com/v5.0/${album_id}/photos`,
-    headers: {},
-    qs: { access_token: PAGE_ACCESS_TOKEN }
-  };
-  console.log(options);
-  request(options, function(error, response, body) {
-    if (error) {
-      res.status(403).send(JSON.stringify(body));
-      throw new Error(error);
-    }
-    else {
-      console.log(body)
-      let ids = JSON.parse(body).data.map(a => `https://graph.facebook.com/v5.0/${a.id}/picture?access_token=${PAGE_ACCESS_TOKEN}`);
-      console.log(ids)
-      res.status(200).send(ids);
-    }
+function getPhotosInAlbum(album_id, res) {
+  return new Promise((resolve, reject) => {
+    var options = {
+      method: 'GET',
+      url: `https://graph.facebook.com/v5.0/${album_id}/photos`,
+      headers: {},
+      qs: { access_token: PAGE_ACCESS_TOKEN },
+    };
+    console.log(options);
+    request(options, function(error, response, body) {
+      if (error) {
+        // res.status(403).send(JSON.stringify(body));
+        throw new Error(error);
+      } else {
+        console.log(body);
+        let ids = JSON.parse(body).data.map(
+          (a) =>
+            `https://graph.facebook.com/v5.0/${a.id}/picture?access_token=${PAGE_ACCESS_TOKEN}`,
+        );
+        console.log(ids);
+        // res.status(200).send(ids);
+        resolve(ids);
+      }
+    });
   });
 }
 
 function uploadToAlbum(tag, album_id, url) {
-  console.log(`submitting to https://graph.facebook.com/v5.0/${album_id}/photos`)
+  console.log(
+    `submitting to https://graph.facebook.com/v5.0/${album_id}/photos`,
+  );
   var options = {
     method: 'POST',
     url: `https://graph.facebook.com/v5.0/${album_id}/photos`,
@@ -387,14 +391,14 @@ function uploadToAlbum(tag, album_id, url) {
     form: {
       url: url,
       caption: tag,
-      access_token: PAGE_ACCESS_TOKEN
-    }
+      access_token: PAGE_ACCESS_TOKEN,
+    },
   };
   console.log(options);
   request(options, function(error, response, body) {
     if (error) throw new Error(error);
-      console.log(body);
-      body;
+    console.log(body);
+    body;
     // res.status(303).send(JSON.stringify(body));
   });
 }
