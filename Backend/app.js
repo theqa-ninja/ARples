@@ -5,6 +5,8 @@ const app = express();
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const port = process.env.PORT || 3000;
 
+const models = ["sunshine", "mushroom"]
+
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
@@ -107,30 +109,50 @@ function handleMessage(sender_psid, received_message) {
   // Checks if the message contains text
   if (received_message.text)
   {
+    // parse message
+    let words = received_message.text.toLowerCase().split(" ")
     // judge message
-    if (received_message.text.indexOf("judge") > -1)
-    {
-      response = {
-        "attachment": {
-          "type": "template",
-          "payload": {
-          "template_type": "generic",
-          "elements": [{
-            "title":"Go forth and Judge",
-            "subtitle":"Which category do you want to judge?",
-            "default_action": {
-              "type": "web_url",
-              "url": "https://arples.herokuapp.com/",
-              "messenger_extensions": "FALSE",
-              "webview_height_ratio": "FULL"
-              }
-            }]
+    switch (words[0]) {
+      case "judge":
+        response = {
+          "attachment": {
+            "type": "template",
+            "payload": {
+            "template_type": "generic",
+            "elements": [{
+              "title":"Go forth and Judge",
+              "subtitle":"Which category do you want to judge?",
+              "default_action": {
+                "type": "web_url",
+                "url": "https://arples.herokuapp.com/",
+              },
+              "buttons": [
+                {
+                  "type": "postback",
+                  "title": "Googly Eyes!",
+                  "payload": "googly",
+                },
+                {
+                  "type": "postback",
+                  "title": "Mushroom",
+                  "payload": "mushroom",
+                }]
+              }]
+            }
           }
         }
+      break;
+    case "rules":
+      response = {
+        "text": `With the following models, find the funniest place to take a photo`
       }
-    }
-      // generic message
-    else {
+      break;
+    case "models":
+      response = {
+        "text": `the models are ${models.toString()}`
+      }
+      break;
+    default:
       response = {
         "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
       }
