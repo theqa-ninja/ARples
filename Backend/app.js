@@ -103,13 +103,13 @@ app.post('/submit/:id', (req, res) => {
 });
 
 app.get('/family', (req, res) => {
-  uploadToAlbum(
+  let temp = uploadToAlbum(
     'sunny',
-    'https://scontent.xx.fbcdn.net/v/t1.15752-9/75250876_401139800772827_1141236539271938048_n.jpg?_nc_cat=107&_nc_oc=AQn7WIbXsLkCtkLluQdcq3-eRYSA2JQr73Vr8TW3wV6zoMdqFNPHlWtbdXMoucTkFu-nMFfrluqlzkpavfCbVvnI&_nc_ad=z-m&_nc_cid=0&_nc_zor=9&_nc_ht=scontent.xx&oh=f72d36b946ab731367f05c84ac332a95&oe=5E1B85A3',
-    res,
+    108815843893898, // hard coded to upload test
+    'https://scontent.xx.fbcdn.net/v/t1.15752-9/75250876_401139800772827_1141236539271938048_n.jpg?_nc_cat=107&_nc_oc=AQn7WIbXsLkCtkLluQdcq3-eRYSA2JQr73Vr8TW3wV6zoMdqFNPHlWtbdXMoucTkFu-nMFfrluqlzkpavfCbVvnI&_nc_ad=z-m&_nc_cid=0&_nc_zor=9&_nc_ht=scontent.xx&oh=f72d36b946ab731367f05c84ac332a95&oe=5E1B85A3'
   );
 
-  // res.status(205).send('ugh');
+  res.status(205).send(JSON.stringify(temp));
 });
 
 // Facebook api below here
@@ -276,19 +276,19 @@ function handlePostback(sender_psid, received_postback) {
   // Set the response based on the postback payload
   switch (words[0]) {
     case 'googly':
-      uploadToAlbum('googly', words[1]);
+      uploadToAlbum('googly', 108815843893898, words[1]);
       response = {
         text: 'Thanks for the Googly eye submission',
       };
       break;
     case 'mushroom':
-      uploadToAlbum('mushroom', words[1]);
+      uploadToAlbum('mushroom', 108823223893160, words[1]);
       response = {
         text: 'Thanks for the mushroom submission',
       };
       break;
     case 'sunshine':
-      uploadToAlbum('sunshine', words[1]);
+      uploadToAlbum('sunshine', 108744723901010, words[1]);
       response = {
         text: 'Thanks for the sunshine submission',
       };
@@ -342,22 +342,21 @@ function callSendAPI(sender_psid, response) {
   );
 }
 
-function uploadToAlbum(tag, url, res) {
+function uploadToAlbum(tag, album_id, url) {
   var options = {
     method: 'POST',
-    url: 'https://graph.facebook.com/108815843893898/photos',
+    url: `https://graph.facebook.com/v5.0/${album_id}/photos`,
     headers: {},
     form: {
       url: url,
       caption: tag,
-      published: 'false',
-      access_token: PAGE_ACCESS_TOKEN,
-    },
+      access_token: PAGE_ACCESS_TOKEN
+    }
   };
   console.log(options);
   request(options, function(error, response, body) {
     if (error) throw new Error(error);
-    console.log(body);
-    res.status(303).send(JSON.stringify(body));
+      return body;
+    // res.status(303).send(JSON.stringify(body));
   });
 }
