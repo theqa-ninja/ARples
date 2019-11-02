@@ -288,14 +288,16 @@ function handlePostback(sender_psid, received_postback) {
   switch (words[0]) {
     case 'googly':
       uploadToAlbum('googly', 108815843893898, words[1]);
+      let googly_url = "https://www.facebook.com/ARples-to-ARples-108815843893898"
       response = {
-        text: 'Thanks for the Googly eye submission',
+        text: `Thanks for the Round 1 submission, view it at ${googly_url}`
       };
       break;
     case 'mushroom':
       uploadToAlbum('mushroom', 108823223893160, words[1]);
+      let mushroom_url = "https://www.facebook.com/ARples-to-ARples-108823223893160"
       response = {
-        text: 'Thanks for the mushroom submission',
+        text: `Thanks for the Round 2 submission, view it at ${mushroom_url}`,
       };
       break;
     case 'sunshine':
