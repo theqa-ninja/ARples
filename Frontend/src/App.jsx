@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grommet, Button } from 'grommet';
+import { Grommet } from 'grommet';
 import Stories from 'react-insta-stories';
 import { connect } from 'react-redux';
 import './App.css';
@@ -54,17 +54,14 @@ class App extends React.Component {
     ];
 
     return (
-      <div className="App">
+      <div>
         <Grommet plain>
-          <header className="App-header">
-            <Stories
-              stories={stories}
-              defaultInterval={3000}
-              width={window.innerWidth}
-              height={window.innerHeight}
-            />
-            <Button label="Edit" />
-          </header>
+          <Stories
+            stories={stories}
+            defaultInterval={3000}
+            width={window.innerWidth}
+            height={window.innerHeight}
+          />
         </Grommet>
       </div>
     );
