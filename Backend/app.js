@@ -71,30 +71,34 @@ app.get('/game/:id', (req, res) => {
   });
 });
 
-app.get('/round/:id', (req, res) => {
-  res.json({
-    id: '1',
-    model_id: '<mushroom_id here>',
-    winner: '1',
-    judge: '1',
-    images: {
-      1: {
-        id: 1,
-        url: 'https://picsum.photos/1080/1920',
-      },
-      2: {
-        id: 2,
-        url:
-          'https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/14713509_995433853900445_4536229211525512364_n.jpg?_nc_cat=110&_nc_oc=AQlS8-ml5gj9IVkg39UG2AvelXlTSUDha-8X1VOxFUHi7ZvZOQptsHg2-ndhEZ_5hNY&_nc_ht=scontent-ort2-2.xx&oh=f30fe67bb424c708a35e1600bc3ea00c&oe=5E64E849',
-      },
-    },
-    users: {
-      1: {
-        id: '1',
-      },
-    },
-  });
-});
+// app.get('/round/:id', (req, res) => {
+//   res.json({
+//     id: '1',
+//     model_id: '<mushroom_id here>',
+//     winner: '1',
+//     judge: '1',
+//     images: {
+//       1: {
+//         id: 1,
+//         url: 'https://picsum.photos/1080/1920',
+//       },
+//       2: {
+//         id: 2,
+//         url:
+//           'https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/14713509_995433853900445_4536229211525512364_n.jpg?_nc_cat=110&_nc_oc=AQlS8-ml5gj9IVkg39UG2AvelXlTSUDha-8X1VOxFUHi7ZvZOQptsHg2-ndhEZ_5hNY&_nc_ht=scontent-ort2-2.xx&oh=f30fe67bb424c708a35e1600bc3ea00c&oe=5E64E849',
+//       },
+//     },
+//     users: {
+//       1: {
+//         id: '1',
+//       },
+//     },
+//   });
+// });
+
+app.get('round/:id', (req, res) => {
+  getPhotosInAlbum(108823223893160)
+})
 
 app.post('/submit/:id', (req, res) => {
   console.log(req.body);
@@ -342,7 +346,32 @@ function callSendAPI(sender_psid, response) {
   );
 }
 
+function getPhotosInAlbum(album_id)
+{
+  var options = {
+    method: 'GET',
+    url: `https://graph.facebook.com/v5.0/${album_id}/photos`,
+    headers: {},
+    form: {
+      url: url,
+      caption: tag,
+      access_token: PAGE_ACCESS_TOKEN
+    }
+  };
+  console.log(options);
+  request(options, function(error, response, body) {
+    if (error) {
+      res.status(403).send(JSON.stringify(body));
+      throw new Error(error);
+    }
+    else {
+      res.status(200).send(JSON.stringify(body));
+    }
+  });
+}
+
 function uploadToAlbum(tag, album_id, url) {
+  console.log(`submitting to https://graph.facebook.com/v5.0/${album_id}/photos`)
   var options = {
     method: 'POST',
     url: `https://graph.facebook.com/v5.0/${album_id}/photos`,
@@ -356,7 +385,8 @@ function uploadToAlbum(tag, album_id, url) {
   console.log(options);
   request(options, function(error, response, body) {
     if (error) throw new Error(error);
-      return body;
+      console.log(body);
+      body;
     // res.status(303).send(JSON.stringify(body));
   });
 }
