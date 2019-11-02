@@ -17,7 +17,7 @@ function* gameRequest({ id }) {
   yield put(gameSuccess(game));
 }
 
-export function* rootSaga() {
+export default function* rootSaga() {
   yield takeEvery(USER_REQUEST, userRequest);
   yield takeEvery(GAME_REQUEST, gameRequest);
 }
