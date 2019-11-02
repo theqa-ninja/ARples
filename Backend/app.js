@@ -53,9 +53,10 @@ app.post('/webhook', (req, res) => {
   // Parse the request body from the POST
   let body = req.body;
 
+  console.log ('get call receieved!')
   // Check the webhook event is from a Page subscription
   if (body.object === 'page') {
-
+    console.log ('get call has a page body')
     // Iterate over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
 
