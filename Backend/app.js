@@ -154,7 +154,12 @@ function handleMessage(sender_psid, received_message) {
       break;
     default:
       response = {
-        "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
+        "text": `Sorry, the available commands are as follows
+        New - start a new game
+        Rules - what are the rules?
+        Models - what are the images we're using?
+        or you can upload the image!
+        `
       }
     }
   }
